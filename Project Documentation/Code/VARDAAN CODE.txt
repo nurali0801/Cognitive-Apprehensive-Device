@@ -1,0 +1,300 @@
+#include<reg51.h>
+#define addwr 0xa0;
+#define addrd 0xa1;
+
+sbit scl=P3^6;
+sbit sda=P3^7;
+sbit rs=P0^2;
+sbit en=P0^3;
+unsigned char ch,ch1,ch2;
+void lcddata();
+
+void uart_init()
+{
+	SCON =0x50;
+	TMOD =0X20;
+	TH1=0XFD;
+	TR1=1;
+}
+void sendx(unsigned char x)
+{
+	SBUF=x;
+	while(!TI);
+	TI=0;		
+}
+void uartsend(unsigned char *ptr)
+{
+	while(*ptr)
+	{
+	sendx(*ptr++);
+	}
+}
+void delay (unsigned int time)
+{
+unsigned int i,j;
+for(j=0;j<time;j++)
+for(i=0;i<=1275;i++);
+} 
+
+void start()
+{
+scl=1;
+sda=1;
+sda=0;
+scl=0;
+}
+
+void ack()
+{
+sda=0;
+scl=1;
+scl=0;
+sda=1;
+}
+
+void nack()
+{
+scl=1;
+sda=1;
+scl=0;
+sda=0;
+}
+
+void stop()
+{
+scl=0;
+sda=0;
+sda=1;
+scl=0; 
+}
+
+
+void i2c_out_byte(unsigned char o_byte)
+{
+unsigned int i;
+for(i=0;i<8;i++)
+      {
+      
+      if(o_byte & 0x80)
+	  {
+	  		sda=1;
+	  }
+	  else
+	  {
+     		sda=0;
+	  }
+	  scl=1;
+	  scl=0;
+	  o_byte=o_byte<<1;
+
+      }
+	  sda=1;
+}
+	
+		 
+unsigned char i2c_in_byte(void)
+{
+unsigned char i_byte,i;
+sda=1;
+for(i=0;i<8;i++)
+ {
+	scl=1;
+	if(sda==1)
+		 {
+		 i_byte=(i_byte<<1)|0x01;
+		 }
+else
+	     {
+		 i_byte=(i_byte<<1);
+		 }
+	 scl=0;
+  }
+  return (i_byte);
+
+} 	 
+
+
+void lcdcmd (unsigned char ch)
+{
+P0=(ch & 0xf0);   
+rs=0;
+en=1;
+delay(1);
+en=0;
+ch=ch<<4;
+P0=(ch & 0xf0);
+rs=0;
+en=1;
+delay(1);
+en=0;
+} 
+	
+void lcd_enable()
+{
+rs=1;
+en=1;
+delay(1);
+en=0;
+}
+
+void init()
+{
+lcdcmd (0x33);
+lcdcmd (0x32);
+lcdcmd (0x28);
+lcdcmd (0x0c);
+lcdcmd (0x06);
+lcdcmd (0x01);
+}
+	
+void lcddata (unsigned char ch)
+{
+P0=(ch & 0xf0);
+lcd_enable();
+delay(1);
+ch=ch<<4;
+P0=(ch & 0xf0);
+lcd_enable(); 
+}
+	
+	
+	
+void adc_conv(unsigned char ch1)
+{
+unsigned char x,y,a1,a2,a3;
+x=ch1;
+y=x/10;
+a1=x%10;
+a2=y%10;
+a3=y/10;
+
+a1+=0x30;
+a2+=0x30;
+a3+=0x30;
+
+lcddata(a3);
+lcddata(a2);
+lcddata(a1); 
+//sendx(a3);
+//sendx(a2);
+//sendx(a1);
+//sendx(0x0A);
+//sendx(0x0D);
+	
+}		 
+
+
+	
+void lcd_ser(unsigned char *ptr)
+{
+while(*ptr)
+	{
+	lcddata (*ptr++);
+	}
+}
+	
+
+
+void main()
+{
+uart_init();
+init ();	 
+lcddata(0x80);
+lcd_ser(" accelerometer "); 
+lcddata(0x80);
+
+	while(1)
+	{
+//for X axis readings--------------------------------------------------------------------------------
+	start();
+	i2c_out_byte(0x90);
+	nack();
+	i2c_out_byte(0x00);
+	nack();
+	i2c_out_byte(0x00);
+	nack();
+	stop();
+	
+	start();
+	i2c_out_byte(0x91);
+	nack();
+	i2c_in_byte();
+	ack();
+	ch=i2c_in_byte();
+	nack();
+	stop();
+	lcdcmd(0xc0);
+	lcddata('x');	 
+	adc_conv(ch); 
+
+//for y axis readings------------------------------------------------------------------------------------------	
+	start();
+	i2c_out_byte(0x90);
+	nack();
+	i2c_out_byte(0x01);
+	nack();
+	i2c_out_byte(0x01);
+	nack();
+	stop();
+	
+	start();
+	i2c_out_byte(0x91);
+	nack();
+	i2c_in_byte();
+	ack();
+	ch1=i2c_in_byte();
+	nack();
+	stop();
+	lcdcmd(0xc4);
+	lcddata('Y');	 
+	adc_conv(ch1);
+	 	
+//for z axis readings-------------------------------------------------------------------------------------------- 	
+	start();
+	i2c_out_byte(0x90);
+	nack();
+	i2c_out_byte(0x02);
+	nack();
+	i2c_out_byte(0x02);
+	nack();
+	stop();
+	
+	start();
+	i2c_out_byte(0x91);
+	nack();
+	i2c_in_byte();
+	ack();
+	ch2=i2c_in_byte();
+	nack();
+	stop();
+	lcdcmd(0xc8);
+	lcddata('z'); 	 
+	adc_conv(ch2);
+if(ch>110)
+{
+uartsend("NH@");
+sendx(0x0A);
+sendx(0x0D);
+}
+else if(ch<70)
+{
+uartsend("NH@");
+sendx(0x0A);
+sendx(0x0D);
+
+}
+//else if(ch2<100)
+//{
+//uartsend("Need Help");
+//sendx(0x0A);
+//sendx(0x0D);
+
+}
+}
+
+
+
+
+
+
+

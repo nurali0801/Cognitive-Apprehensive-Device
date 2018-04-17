@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="@drawable/app_image" >
+    
+    
+    
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Welcome to Android Child Activity Observer App"
+        android:textColor="#000080"
+        android:textStyle="bold" />
+    
+    
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text=""
+       />
+    
+    
+       <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text=""
+       />
+    
+       
+          <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text=""
+       />
+    
+          
+             <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Enter Mobile#"
+         android:textColor="#FFFF00"
+         android:textSize="20dp"
+         
+       />
+             
+             <EditText
+                 android:id="@+id/et_number"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:inputType="number"
+         android:textColor="#000080"
+         android:hint="Mobile#" />
+             
+             
+              <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text=""
+       />
+              
+          <Button
+                android:id="@+id/btn_register"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+          style="@style/mybutton"
+        android:text="Register"
+         android:textColor="#FFFFFF" />      
+    
+    
+    
+    
+
+   
+    
+
+</LinearLayout>

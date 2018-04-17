@@ -1,0 +1,113 @@
+<ScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent">
+    
+<LinearLayout 
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".MainActivity"
+     >
+
+    <!-- <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Welcome to Android Child Activity Observer App"
+        android:textColor="#000080" /> -->
+
+    <TextView
+        android:id="@+id/textView1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Emergency Contact NO"
+        android:textAppearance="?android:attr/textAppearanceLarge" />
+    
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="" />
+
+    <EditText
+        android:id="@+id/txtphoneno"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:ems="10"
+        android:inputType="phone" >
+
+        <requestFocus />
+    </EditText>
+    
+      <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="" />
+
+      <Button
+          android:id="@+id/btnconnect"
+          android:layout_width="fill_parent"
+          android:layout_height="wrap_content"
+          android:text="Connect to Location" />
+      
+        <TextView
+            android:id="@+id/tv_child_activity"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text=""
+        android:textColor="#FF0000"
+        android:textSize="15dp"
+        android:textStyle="bold"
+        android:visibility="gone"
+         android:layout_gravity="center_vertical|center_horizontal" /> 
+        <TextView
+            android:id="@+id/txtstatus"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text=""
+        android:textSize="15dp"
+        /> 
+          
+       <!--   <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="" />
+
+          <Button
+              android:id="@+id/btnspeach"
+              android:layout_width="fill_parent"
+              android:layout_height="wrap_content"
+              android:text="Emergency" />
+ -->
+          <TextView
+              android:id="@+id/txtinput"
+              android:layout_width="wrap_content"
+              android:layout_height="wrap_content"
+              android:text=""
+              android:textAppearance="?android:attr/textAppearanceLarge" />
+          
+         <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="" />
+          
+          
+            <Button
+            android:id="@+id/btn_graph"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:text="Generate Graph"
+            android:visibility="gone"/>
+            
+             <Button
+            android:id="@+id/btn_clear"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:text="Clear Data"
+            android:visibility="gone"/>
+             
+    
+    
+
+</LinearLayout>
+</ScrollView>
